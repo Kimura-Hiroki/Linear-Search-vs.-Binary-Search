@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+        /* CSSスタイルは前回のバージョンから変更ありません */
         :root {
             --bg-color: #f0f2f5;
             --container-bg: #ffffff;
@@ -191,6 +192,14 @@
             font-size: 1.3rem;
             color: var(--accent-color-reset);
         }
+
+        /* ▼▼▼ 追加したスタイル ▼▼▼ */
+        .credit {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: var(--disabled-color);
+        }
+        /* ▲▲▲ 追加したスタイル ▲▲▲ */
     </style>
 </head>
 <body>
@@ -203,26 +212,27 @@
 
         <div class="controls-wrapper">
              <div class="control-group">
-                <span class="control-label">モード:</span>
-                <button id="linear-btn" class="mode-btn">線形探索</button>
-                <button id="binary-btn" class="mode-btn">二分探索</button>
+                 <span class="control-label">モード:</span>
+                 <button id="linear-btn" class="mode-btn">線形探索</button>
+                 <button id="binary-btn" class="mode-btn">二分探索</button>
             </div>
              <div class="control-group">
-                <span class="control-label">レベル:</span>
-                <button id="level-beginner" class="level-btn">初級 (1-20)</button>
-                <button id="level-intermediate" class="level-btn">中級 (1-50)</button>
-                <button id="level-advanced" class="level-btn">上級 (1-100)</button>
+                 <span class="control-label">レベル:</span>
+                 <button id="level-beginner" class="level-btn">初級 (1-20)</button>
+                 <button id="level-intermediate" class="level-btn">中級 (1-50)</button>
+                 <button id="level-advanced" class="level-btn">上級 (1-100)</button>
             </div>
             <button id="reset-btn" class="reset-btn">リセット</button>
         </div>
 
         <main class="game-board">
-            </main>
+        </main>
 
         <footer>
             <p class="message">モードとレベルを選んで開始してください</p>
             <p class="counter">探索回数: <span id="count">0</span> 回</p>
-        </footer>
+            <p class="credit">©キムりん＠松本深志高校</p>
+            </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -303,9 +313,9 @@
 
             function updateLevelButtons() {
                  updateActiveButton(
-                    [levelBeginnerBtn, levelIntermediateBtn, levelAdvancedBtn], 
-                    `level-${currentLevel}`
-                );
+                     [levelBeginnerBtn, levelIntermediateBtn, levelAdvancedBtn], 
+                     `level-${currentLevel}`
+                 );
             }
 
             function updateGuide() {
@@ -325,11 +335,11 @@
                         const mid = Math.floor((low + high) / 2);
                         const midCard = numberCards[mid - 1];
                          if (midCard && !midCard.classList.contains('disabled')) {
-                            midCard.classList.add('next-target');
-                            messageEl.textContent = `範囲(${low}～${high})の中央「${mid}」をクリックしてください`;
+                             midCard.classList.add('next-target');
+                             messageEl.textContent = `範囲(${low}～${high})の中央「${mid}」をクリックしてください`;
                          } else {
-                            gameActive = false;
-                            messageEl.textContent = "探索範囲に数字がありません";
+                             gameActive = false;
+                             messageEl.textContent = "探索範囲に数字がありません";
                          }
                     } else {
                         gameActive = false;
@@ -384,8 +394,12 @@
                     }
                 }
 
+                // ===== ★★★ここが変更点★★★ =====
+                // モードに応じて次のガイド表示までの待機時間を変更します。
+                // 二分探索の時はヒントをしっかり読めるように長めに設定します。
                 const delay = currentMode === 'binary' ? 1200 : 400; // 二分探索: 1.2秒, 線形探索: 0.4秒
                 setTimeout(updateGuide, delay);
+                // ================================
             }
             
             // --- イベントリスナーの設定 ---
